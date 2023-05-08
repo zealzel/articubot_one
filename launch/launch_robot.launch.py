@@ -88,14 +88,17 @@ def generate_launch_description():
         )
     )
 
-    rplidar = Node(
+    rplidar_node = Node(
+        name="rplidar_component",
         package="rplidar_ros",
         executable="rplidar_composition",
         parameters=[
             {
                 "serial_port": "/dev/ttyUSB1",
+                "serial_baudrate": 115200,
                 "frame_id": "laser_frame",
-                "angle_compensate": "true",
+                "angle_compensate": True,
+                "inverted": False,
                 "scan_mode": "Standard",
             }
         ],
