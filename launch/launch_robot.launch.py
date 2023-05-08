@@ -94,7 +94,8 @@ def generate_launch_description():
         executable="rplidar_composition",
         parameters=[
             {
-                "serial_port": "/dev/ttyUSB1",
+                # "serial_port": "/dev/ttyUSB1",
+                "serial_port": "/dev/rplidar",
                 "serial_baudrate": 115200,
                 "frame_id": "laser_frame",
                 "angle_compensate": True,
