@@ -16,7 +16,6 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard
 
 ```bash
 ros2 launch slam_toolbox online_async_launch.py \
-  map:="$HOME/maps/office3_res0.02_0523.yaml" \
   slam_params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/mapper_params_online_async.yaml"
 ```
 
