@@ -1,7 +1,88 @@
-## Robot Package Template
+## Launch the robot
 
-This is a GitHub template. You can make your own copy by clicking the green "Use this template" button.
+```bash
+ros2 launch articubot_one launch_robot.launch.py
+```
 
-It is recommended that you keep the repo/package name the same, but if you do change it, ensure you do a "Find all" using your IDE (or the built-in GitHub IDE by hitting the `.` key) and rename all instances of `my_bot` to whatever your project's name is.
+## teleop
 
-Note that each directory currently has at least one file in it to ensure that git tracks the files (and, consequently, that a fresh clone has direcctories present for CMake to find). These example files can be removed if required (and the directories can be removed if `CMakeLists.txt` is adjusted accordingly).
+```bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
+
+## slam first, nav next
+
+#### slam mapping
+
+```bash
+ros2 launch slam_toolbox online_async_launch.py \
+  map:="$HOME/maps/office3_res0.02_0523.yaml" \
+  slam_params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/mapper_params_online_async.yaml"
+```
+
+#### rviz
+
+##### method1: utilaize rviz_launch.py with default config for nav
+
+```bash
+ros2 launch nav2_bringup rviz_launch.py
+```
+
+##### method2: raw rviz2 with manually adding map, tf, scan etc
+
+```bash
+rviz2
+```
+
+#### save the map
+
+##### save old map format using nav2 (.pgm, .yaml)
+
+```bash
+ros2 run nav2_map_server map_saver_cli -f mymap
+```
+
+##### save new serialized map format (map pose-graph) using slam_toolbox
+
+useable for continued mapping, slam_toolbox localization, offline manipulation
+
+```bash
+ros2 service call /slam_toolbox/serialize_map slam_toolbox/srv/SerializePoseGraph "filename: '$HOME/maps/mymap'"
+```
+
+#### navigation
+
+##### method1: use bringup_launch.py
+
+```bash
+ros2 launch nav2_bringup bringup_launch.py \
+  map:="/home/pi/maps/office3_res0.02_0523.yaml" \
+  params_file:="/home/pi/zbot_ws/src/articubot_one/config/nav2_params1.yaml"
+```
+
+##### method2: use bringup_launch.py
+
+```bash
+ros2 launch nav2_bringup localization_launch.py \
+  map:="/home/pi/maps/office3_res0.02_0523.yaml"
+ros2 launch nav2_bringup navigation.launch.py \
+  params_file:="/home/pi/zbot_ws/src/articubot_one/config/nav2_params1.yaml"
+```
+
+## slam & nav simultaneously
+
+##### method1: use bringup_launch.py
+
+```bash
+ros2 launch nav2_bringup bringup_launch.py map:=none \
+  params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/nav2_params.yaml"
+ros2 launch nav2_bringup rviz_launch.py
+```
+
+##### method2: use slam_toolbox & nav2_bringup separately
+
+```bash
+ros2 launch slam_toolbox online_async_launch.py use_sim_time:=False
+ros2 launch nav2_bringup navigation.launch.py \
+  params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/nav2_params.yaml"
+```
