@@ -1,5 +1,6 @@
 import os
 
+from launch.actions import DeclareLaunchArgument
 from ament_index_python.packages import get_package_share_directory
 
 from launch.actions import ExecuteProcess
@@ -15,6 +16,9 @@ from launch.event_handlers import OnProcessExit
 
 
 def generate_launch_description():
+    world_arg = DeclareLaunchArgument(
+        "world", default_value="/home/zealzel/zbot2_ws/src/articubot_one/worlds/obstacles.world", description="Name of the map"
+    )
 
     package_name='articubot_one' #<--- CHANGE ME
     rsp = IncludeLaunchDescription(
@@ -64,13 +68,13 @@ def generate_launch_description():
 
     diff_drive_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["diff_cont"],
     )
 
     joint_broad_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["joint_broad"],
     )
 
@@ -103,6 +107,7 @@ def generate_launch_description():
     # )
 
     return LaunchDescription([
+        world_arg,
         rsp,
         joystick,
         twist_mux,
