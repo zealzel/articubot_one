@@ -21,9 +21,11 @@ def generate_launch_description():
 
     rsp_launch_path = get_path(package_name, ["launch", "rsp.launch.py"])
     gazebo_launch_path = get_path("gazebo_ros", ["launch", "gazebo.launch.py"])
-    world_path = get_path(package_name, ["worlds", "obstacles.world"])
 
-    x_arg = DeclareLaunchArgument("x", default_value="0", description="x position")
+    # world_path = get_path(package_name, ["worlds", "obstacles.world"])
+    world_path = get_path("turtlebot3_gazebo", ["worlds", "turtlebot3_world.world"])
+
+    x_arg = DeclareLaunchArgument("x", default_value="0.5", description="x position")
     y_arg = DeclareLaunchArgument("y", default_value="0", description="y position")
     world_arg = DeclareLaunchArgument(
         "world",
