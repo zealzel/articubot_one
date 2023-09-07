@@ -8,7 +8,7 @@ slam_toolbox:
     ceres_trust_strategy: LEVENBERG_MARQUARDT
     ceres_dogleg_type: TRADITIONAL_DOGLEG
     ceres_loss_function: None
-    
+
     # ROS Parameters
     odom_frame: odom
     map_frame: map
@@ -24,10 +24,10 @@ slam_toolbox:
     map_start_pose: [0.0, 0.0, 0.0]
     #map_start_pose: [-3.0, 4.0, 0.0]
     #map_start_at_dock: true
-    
+
     # my customed parameters
     map_update_interval: 2.0
-    resolution: 0.03 
+    resolution: 0.03
     max_laser_range: 12.0 #for rastering images
     minimum_travel_distance: 0.2
 
@@ -65,8 +65,8 @@ amcl:
     #recovery_alpha_fast: 0.1
     #recovery_alpha_slow: 0.001
     resample_interval: 1
-    robot_model_type: "differential"
-    #robot_model_type: "nav2_amcl::DifferentialMotionModel" # wrong, don't use, will crash
+    #robot_model_type: "differential"
+    robot_model_type: "nav2_amcl::DifferentialMotionModel"
     save_pose_rate: 0.5
     sigma_hit: 0.2
     tf_broadcast: true
@@ -216,7 +216,7 @@ controller_server:
       RotateToGoal.scale: 32.0
       RotateToGoal.slowing_factor: 10.0
       RotateToGoal.lookahead_time: -1.0
-      
+
 controller_server_rclcpp_node:
   ros__parameters:
     use_sim_time: True
@@ -367,7 +367,7 @@ waypoint_follower:
   ros__parameters:
     loop_rate: 20
     stop_on_failure: false
-    waypoint_task_executor_plugin: "wait_at_waypoint"   
+    waypoint_task_executor_plugin: "wait_at_waypoint"
     wait_at_waypoint:
       plugin: "nav2_waypoint_follower::WaitAtWaypoint"
       enabled: True
