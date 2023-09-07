@@ -25,7 +25,7 @@ def generate_launch_description():
     costmap_filter_info_launch_path = get_path(package_name, ["launch", "costmap_filter_info.launch.py"])
     rviz_config_path = get_path("nav2_bringup", ["rviz", "nav2_default_view.rviz"])
     default_map_path = get_path("turtlebot3_navigation2", ["map", "map.yaml"])
-    default_parmas_path = get_path(package_name, ["config", "nav2_params.yaml.20230512"])
+    default_parmas_path = get_path(package_name, ["config", "nav2_params_keepout.yaml"])
 
     use_sim_arg = DeclareLaunchArgument(
         name="sim",
