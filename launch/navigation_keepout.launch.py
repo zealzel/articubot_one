@@ -21,8 +21,12 @@ def generate_launch_description():
     nav2_launch_path = get_path("nav2_bringup", ["launch", "bringup_launch.py"])
     costmap_filter_info_launch_path = get_path(package_name, ["launch", "costmap_filter_info.launch.py"])
     rviz_config_path = get_path("nav2_bringup", ["rviz", "nav2_default_view.rviz"])
+
+    # For simulations only, using turtlebot3 maze.
+    # If using real robot, Both map and mask should be provided.
     default_map_path = get_path("turtlebot3_navigation2", ["map", "map.yaml"])
-    default_parmas_path = get_path(package_name, ["config", "nav2_params_keepout.yaml"])
+    default_mask_path = get_path(package_name, ["maps", "keepout_mask.yaml"])
+
 
     use_sim_arg = DeclareLaunchArgument(
         name="sim",
@@ -39,8 +43,10 @@ def generate_launch_description():
     )
     mask_arg = DeclareLaunchArgument(
         "mask",
+        default_value=default_mask_path,
         description="mask file for keepout layer",
     )
+    default_parmas_path = get_path(package_name, ["config", "nav2_params_keepout.yaml"])
     params_arg = DeclareLaunchArgument(
         "params_file",
         default_value=default_parmas_path,
