@@ -11,16 +11,14 @@ from launch.actions import (
 
 
 def get_path(package_name, subpaths):
-    package_share_directory = PathJoinSubstitution(
-        [FindPackageShare(package_name)] + subpaths
-    )
-    return package_share_directory
+    return PathJoinSubstitution([FindPackageShare(package_name)] + subpaths)
 
 
 def generate_launch_description():
     package_name = "articubot_one"
 
     nav2_launch_path = get_path("nav2_bringup", ["launch", "bringup_launch.py"])
+
     rviz_config_path = get_path("nav2_bringup", ["rviz", "nav2_default_view.rviz"])
     default_map_path = get_path("turtlebot3_navigation2", ["map", "map.yaml"])
     default_parmas_path = get_path(package_name, ["config", "nav2_params.yaml.20230512"])

@@ -12,10 +12,7 @@ from launch.actions import (
 
 
 def get_path(package_name, subpaths):
-    package_share_directory = PathJoinSubstitution(
-        [FindPackageShare(package_name)] + subpaths
-    )
-    return package_share_directory
+    return PathJoinSubstitution([FindPackageShare(package_name)] + subpaths)
 
 
 def generate_launch_description():
