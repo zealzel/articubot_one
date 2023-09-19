@@ -21,7 +21,7 @@ def generate_launch_description():
 
     rviz_config_path = get_path("nav2_bringup", ["rviz", "nav2_default_view.rviz"])
     default_map_path = get_path(package_name, ["maps", "turtlebot3_world.yaml"])
-    default_parmas_path = get_path(package_name, ["config", "nav2_params.yaml.20230512"])
+    default_parmas_path = get_path(package_name, ["config", "nav2_params.yaml"])
 
     use_sim_arg = DeclareLaunchArgument(
         name="sim",
