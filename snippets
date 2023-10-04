@@ -1,0 +1,30 @@
+# ===================================================
+# real robot navigation
+# ===================================================
+
+# === robot bringup (on robot) ===
+ros2 launch articubot_one launch_robot.launch.py
+
+# === teleop (on robot or pc) ===
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+
+# === slam mapping (on robot) ===
+ros2 launch slam_toolbox online_async_launch.py \
+    slam_params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/mapper_params_online_async.yaml" \
+    map:="$HOME/maps/office3_res0.02_0523.yaml"
+
+# === save the map ===
+ros2 run nav2_map_server map_saver_cli -f mymap # pgm/yaml
+    # serialized map for continuous mapping
+    ros2 service call /slam_toolbox/serialize_map slam_toolbox/srv/SerializePoseGraph "filename: '$HOME/maps/mymap'"
+
+# === navigation (on robot) ===
+ros2 launch articubot_one navigation.launch.py
+    # verbose
+    ros2 launch articubot_one navigation.launch.py sim:=false rviz:=false \
+        map:="$(ros2 pkg prefix fitrobot)/share/fitrobot/maps/office_res0.02_0523.yaml"
+        params_file:="$(ros2 pkg prefix fitrobot)/share/fitrobot/config/nav2_params.yaml"
+
+# === rviz (on pc) ===
+ros2 launch nav2_bringup rviz_launch.py
+
