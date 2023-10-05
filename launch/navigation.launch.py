@@ -17,7 +17,7 @@ def get_path(package_name, subpaths):
 def generate_launch_description():
     package_name = "articubot_one"
 
-    default_map_path = get_path("fitrobot", ["maps", "office_res0.02_0523.yaml"])
+    default_map_path = get_path("fitrobot", ["maps", "office_res002_0523.yaml"])
     default_map_path_sim = get_path(package_name, ["maps", "turtlebot3_world.yaml"])
     default_parmas_path = get_path(package_name, ["config", "nav2_params.yaml"])
     nav2_launch_path = get_path("nav2_bringup", ["launch", "bringup_launch.py"])
