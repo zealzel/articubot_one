@@ -54,22 +54,11 @@ def generate_launch_description():
     nav2_bringup = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(nav2_launch_path),
         launch_arguments={
-            # "map": default_map_path_sim,
             "map": LaunchConfiguration("map"),
             "use_sim_time": LaunchConfiguration("sim"),
             "params_file": LaunchConfiguration("params_file"),
         }.items(),
         condition=IfCondition(LaunchConfiguration("sim")),
-    )
-    nav2_bringup_sim = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(nav2_launch_path),
-        launch_arguments={
-            # "map": default_map_path,
-            "map": LaunchConfiguration("map"),
-            "use_sim_time": LaunchConfiguration("sim"),
-            "params_file": LaunchConfiguration("params_file"),
-        }.items(),
-        condition=UnlessCondition(LaunchConfiguration("sim")),
     )
     rviz = Node(
         package="rviz2",
@@ -87,7 +76,6 @@ def generate_launch_description():
             map_sim_arg,
             map_arg,
             params_arg,
-            nav2_bringup_sim,
             nav2_bringup,
             rviz,
         ]
