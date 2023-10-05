@@ -23,4 +23,12 @@ ros2 launch articubot_one navigation.launch.py sim:=true rviz:=true
     # verbose
     ros2 launch articubot_one navigation.launch.py sim:=true rviz:=true \
         map:="$(ros2 pkg prefix articubot_one)/share/articubot_one/maps/turtlebot3_world.yaml"
-        params_file:="$(ros2 pkg prefix fitrobot)/share/fitrobot/config/nav2_params.yaml"
+        params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/nav2_params.yaml"
+
+# === defined-route navigation ===
+ros2 launch articubot_one navigation_keepout.launch.py sim:=true rviz:=true
+    # verbose
+    ros2 launch articubot_one navigation.launch.py sim:=true rviz:=true \
+        map:="$(ros2 pkg prefix articubot_one)/share/articubot_one/maps/turtlebot3_world.yaml"
+        mask:="$(ros2 pkg prefix articubot_one)/share/articubot_one/masks/keepout_mask_turtlebot3_world.yaml"
+        params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/nav2_params_keepout.yaml"

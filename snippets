@@ -23,8 +23,15 @@ ros2 launch articubot_one navigation.launch.py
     # verbose
     ros2 launch articubot_one navigation.launch.py sim:=false rviz:=false \
         map:="$(ros2 pkg prefix fitrobot)/share/fitrobot/maps/office_res002_0523.yaml"
-        params_file:="$(ros2 pkg prefix fitrobot)/share/fitrobot/config/nav2_params.yaml"
+        params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/nav2_params.yaml"
+
+# === defined-route navigation (on robot) ===
+ros2 launch articubot_one navigation_keepout.launch.py sim:=false rviz:=true
+    # verbose
+    ros2 launch articubot_one navigation.launch.py sim:=false rviz:=true \
+        map:="$(ros2 pkg prefix fitrobot)/share/fitrobot/maps/office_res002_0523.yaml"
+        mask:="$(ros2 pkg prefix fitrobot)/share/fitrobot/masks/keepout_mask_office_res002_0523.yaml"
+        params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/nav2_params_keepout.yaml"
 
 # === rviz (on pc) ===
 ros2 launch nav2_bringup rviz_launch.py
-
