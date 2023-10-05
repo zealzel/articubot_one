@@ -58,7 +58,6 @@ def generate_launch_description():
             "use_sim_time": LaunchConfiguration("sim"),
             "params_file": LaunchConfiguration("params_file"),
         }.items(),
-        condition=IfCondition(LaunchConfiguration("sim")),
     )
     rviz = Node(
         package="rviz2",
