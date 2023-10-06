@@ -158,7 +158,8 @@ bt_navigator_rclcpp_node:
 controller_server:
   ros__parameters:
     use_sim_time: True
-    controller_frequency: 20.0
+    #controller_frequency: 20.0
+    controller_frequency: 10.0
     min_x_velocity_threshold: 0.001
     min_y_velocity_threshold: 0.5
     min_theta_velocity_threshold: 0.001
@@ -190,7 +191,8 @@ controller_server:
     FollowPath:
       plugin: "nav2_mppi_controller::MPPIController"
       time_steps: 56
-      model_dt: 0.05
+      #model_dt: 0.05
+      model_dt: 0.1
       batch_size: 2000
       vx_std: 0.2
       vy_std: 0.2
@@ -274,8 +276,8 @@ controller_server_rclcpp_node:
 local_costmap:
   local_costmap:
     ros__parameters:
-      #update_frequency: 5.0
-      update_frequency: 20.0
+      #update_frequency: 20.0
+      update_frequency: 10.0
       publish_frequency: 2.0
       global_frame: odom
       robot_base_frame: base_link
@@ -378,7 +380,8 @@ map_saver:
 
 planner_server:
   ros__parameters:
-    expected_planner_frequency: 20.0
+    #expected_planner_frequency: 20.0
+    expected_planner_frequency: 10.0
     use_sim_time: True
     planner_plugins: ["GridBased"]
     GridBased:
