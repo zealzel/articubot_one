@@ -8,6 +8,12 @@ ros2 launch articubot_one launch_sim.launch.py
 # === teleop ===
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 
+# === simulation using rmf's traffic-editor generated world ===
+ros2 launch articubot_one sim.launch.py # (default map_name: fit_office)
+
+
+<<<----------------------------------------------------------------------->>>
+
 # === slam mapping ===
 ros2 launch slam_toolbox online_async_launch.py \
     slam_params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/mapper_params_online_async.yaml" \
@@ -32,3 +38,9 @@ ros2 launch articubot_one navigation_keepout.launch.py sim:=true rviz:=true
         map:="$(ros2 pkg prefix articubot_one)/share/articubot_one/maps/turtlebot3_world.yaml"
         mask:="$(ros2 pkg prefix articubot_one)/share/articubot_one/masks/keepout_mask_turtlebot3_world.yaml"
         params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/nav2_params_keepout.yaml"
+
+# === defined_route navigation using traffic-editor generated gazebo world & slamed maps & homebrewed masks ===
+ros2 launch articubot_one navigation_keepout_rmf.launch.py sim:=true rviz:=true
+    # verbose
+    ros2 launch articubot_one  navigation_keepout_rmf.launch.py sim:=true rviz:=true \
+        map_name:=fit_office_res002_0926 # (default: fit_office_res002_0926)
