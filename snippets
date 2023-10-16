@@ -8,6 +8,8 @@ ros2 launch articubot_one launch_robot.launch.py
 # === teleop (on robot or pc) ===
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 
+<<<----------------------------------------------------------------------->>>
+
 # === slam mapping (on robot) ===
 ros2 launch slam_toolbox online_async_launch.py \
     slam_params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/mapper_params_online_async.yaml" \
