@@ -20,12 +20,6 @@ def generate_launch_description():
 
     default_map_path = get_path("fitrobot", ["maps", "office_res002_0523.yaml"])
     default_map_path_sim = get_path(package_name, ["maps", "turtlebot3_world.yaml"])
-    #
-    nav2_launch_path = get_path("nav2_bringup", ["launch", "bringup_launch.py"])
-    costmap_filter_info_launch_path = get_path(
-        package_name, ["launch", "costmap_filter_info.launch.py"]
-    )
-    rviz_config_path = get_path("nav2_bringup", ["rviz", "nav2_default_view.rviz"])
 
     default_mask_path = get_path(
         "fitrobot", ["masks", "keepout_mask_office_res002_0523.yaml"]
@@ -33,6 +27,14 @@ def generate_launch_description():
     default_mask_path_sim = get_path(
         package_name, ["masks", "keepout_mask_turtlebot3_world.yaml"]
     )
+    default_params_file_path = get_path(
+        package_name, ["config", "nav2_params_keepout.yaml"]
+    )
+    costmap_filter_info_launch_path = get_path(
+        package_name, ["launch", "costmap_filter_info.launch.py"]
+    )
+    nav2_launch_path = get_path("nav2_bringup", ["launch", "bringup_launch.py"])
+    rviz_config_path = get_path("nav2_bringup", ["rviz", "nav2_default_view.rviz"])
 
     use_sim_arg = DeclareLaunchArgument(
         name="sim",
@@ -42,7 +44,6 @@ def generate_launch_description():
     use_rviz_arg = DeclareLaunchArgument(
         name="rviz", default_value="false", description="Run rviz"
     )
-
     map_arg = DeclareLaunchArgument(
         name="map",
         default_value=default_map_path,
@@ -55,7 +56,6 @@ def generate_launch_description():
         description="Navigation map path",
         condition=IfCondition(LaunchConfiguration("sim")),
     )
-
     mask_arg = DeclareLaunchArgument(
         "mask",
         default_value=default_mask_path,
@@ -69,10 +69,9 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration("sim")),
     )
 
-    default_parmas_path = get_path(package_name, ["config", "nav2_params_keepout.yaml"])
     params_arg = DeclareLaunchArgument(
         "params_file",
-        default_value=default_parmas_path,
+        default_value=default_params_file_path,
         description=(
             "Full path to the ROS2 parameters file to use for all launched nodes"
         ),
@@ -90,7 +89,6 @@ def generate_launch_description():
             "mask": LaunchConfiguration("mask"),
         }.items(),
     )
-
     nav2_bringup = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(nav2_launch_path),
         launch_arguments={
@@ -99,7 +97,7 @@ def generate_launch_description():
             "params_file": LaunchConfiguration("params_file"),
         }.items(),
     )
-
+    # if not delayed, nav2_bringup will not able to launch controllers successfully
     costmap_filter_info_delayed = LaunchDescription(
         [
             TimerAction(
@@ -121,10 +119,12 @@ def generate_launch_description():
         [
             use_sim_arg,
             use_rviz_arg,
-            map_arg, map_sim_arg,
-            mask_arg, mask_sim_arg,
-            params_arg,
             keepout_params_arg,
+            map_arg,
+            map_sim_arg,
+            mask_arg,
+            mask_sim_arg,
+            params_arg,
             nav2_bringup,
             costmap_filter_info_delayed,
             rviz,
