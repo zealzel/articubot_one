@@ -18,7 +18,7 @@ def get_path(package_name, subpaths):
 
 
 def generate_launch_description():
-    MAP_NAME = "fit_office_res002_0926"
+    MAP_NAME = "fit_office_res002_1011"  # or turtlebot3_world
     package_name = "articubot_one"
     nav2_launch_path = get_path("nav2_bringup", ["launch", "bringup_launch.py"])
     costmap_filter_info_launch_path = get_path(

@@ -31,10 +31,11 @@ ros2 launch articubot_one navigation.launch.py sim:=true rviz:=true
         params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/nav2_params.yaml"
 
 # === navigation using traffic-editor generated gazebo world & slamed maps ===
-ros2 launch linorobot2_navigation navigation_rmf.launch.py
+ros2 launch articubot_one navigation_rmf.launch.py
     # verbose (default)
-    ros2 launch linorobot2_navigation navigation_rmf.launch.py rviz:=true \
-        map_name:=fit_office_res002_0926 # options: fit_office_res002_0926(default)|turtlebot3_world
+    ros2 launch articubot_one navigation_rmf.launch.py rviz:=true \
+        map_name:=fit_office_res002_1011 # options: fit_office_res002_1011(default)|turtlebot3_world
+        params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/nav2_params.yaml"
 
 
 # === defined-route navigation ===

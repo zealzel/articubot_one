@@ -46,7 +46,8 @@
   <gazebo reference="laser_frame">
     <material>Gazebo/Black</material>
 
-    <sensor name="laser" type="ray">
+    <!-- <sensor name="laser" type="ray"> -->
+    <sensor name="laser" type="gpu_ray">
       <pose> 0 0 0 0 0 0 </pose>
       <visualize>false</visualize>
       <update_rate>10</update_rate>
