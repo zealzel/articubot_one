@@ -20,61 +20,29 @@ def get_path(package_name, subpaths):
 def generate_launch_description():
     MAP_NAME = "fit_office_res002_0926"
     package_name = "articubot_one"
-
-    default_map_path = get_path("fitrobot", ["maps", "office_res002_0523.yaml"])
-    default_map_path_sim = get_path(package_name, ["maps", "turtlebot3_world.yaml"])
-    #
     nav2_launch_path = get_path("nav2_bringup", ["launch", "bringup_launch.py"])
     costmap_filter_info_launch_path = get_path(
         package_name, ["launch", "costmap_filter_info.launch.py"]
     )
     rviz_config_path = get_path("nav2_bringup", ["rviz", "nav2_default_view.rviz"])
 
-    default_mask_path = get_path(
-        "fitrobot", ["masks", "keepout_mask_office_res002_0523.yaml"]
-    )
-    default_mask_path_sim = get_path(
-        package_name, ["masks", "keepout_mask_turtlebot3_world.yaml"]
-    )
-
-    use_sim_arg = DeclareLaunchArgument(
-        name="sim",
-        default_value="false",
-        description="Enable use_sime_time to true",
-    )
-    use_rviz_arg = DeclareLaunchArgument(
-        name="rviz", default_value="false", description="Run rviz"
-    )
+    use_sim_arg = DeclareLaunchArgument(name="sim", default_value="true")
+    use_rviz_arg = DeclareLaunchArgument(name="rviz", default_value="true")
 
     map_name_arg = DeclareLaunchArgument("map_name", default_value=MAP_NAME)
     maploc = os.path.join(get_package_share_directory(package_name), 'maps')
+
     map_arg = DeclareLaunchArgument(
         name="map",
-        default_value=default_map_path,
-        description="Navigation map path",
-        condition=UnlessCondition(LaunchConfiguration("sim")),
-    )
-    map_sim_arg = DeclareLaunchArgument(
-        name="map",
-        # default_value=default_map_path_sim,
         default_value=[f'{maploc}/', LaunchConfiguration("map_name"), ".yaml"],
         description="Navigation map path",
-        condition=IfCondition(LaunchConfiguration("sim")),
     )
 
     maskloc = os.path.join(get_package_share_directory(package_name), 'masks')
     mask_arg = DeclareLaunchArgument(
         "mask",
-        default_value=default_mask_path,
-        description="mask file for keepout layer",
-        condition=UnlessCondition(LaunchConfiguration("sim")),
-    )
-    mask_sim_arg = DeclareLaunchArgument(
-        "mask",
-        # default_value=default_mask_path_sim,
         default_value=[f'{maskloc}/', "keepout_mask.", LaunchConfiguration("map_name"), ".yaml"],
         description="mask file for keepout layer",
-        condition=IfCondition(LaunchConfiguration("sim")),
     )
 
     default_params_path = get_path(package_name, ["config", "nav2_params_keepout.yaml"])
@@ -85,6 +53,7 @@ def generate_launch_description():
             "Full path to the ROS2 parameters file to use for all launched nodes"
         ),
     )
+
     keepout_params_arg = DeclareLaunchArgument(
         "keepout_params_file",
         default_value=get_path(package_name, ["params", "keepout_params.yaml"]),
@@ -103,7 +72,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(nav2_launch_path),
         launch_arguments={
             "map": LaunchConfiguration("map"),
-            "use_sim_time": LaunchConfiguration("sim"),
+            "use_sim_time": True,
             "params_file": LaunchConfiguration("params_file"),
         }.items(),
     )
@@ -123,15 +92,15 @@ def generate_launch_description():
         output="screen",
         arguments=["-d", rviz_config_path],
         condition=IfCondition(LaunchConfiguration("rviz")),
-        parameters=[{"use_sim_time": LaunchConfiguration("sim")}],
+        parameters=[{"use_sim_time": True}],
     )
     return LaunchDescription(
         [
             use_sim_arg,
             use_rviz_arg,
             map_name_arg,
-            map_arg, map_sim_arg,
-            mask_arg, mask_sim_arg,
+            map_arg,
+            mask_arg,
             params_arg,
             keepout_params_arg,
             nav2_bringup,
