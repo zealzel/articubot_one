@@ -72,7 +72,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(nav2_launch_path),
         launch_arguments={
             "map": LaunchConfiguration("map"),
-            "use_sim_time": True,
+            "use_sim_time": LaunchConfiguration("sim"),
             "params_file": LaunchConfiguration("params_file"),
         }.items(),
     )
@@ -92,7 +92,7 @@ def generate_launch_description():
         output="screen",
         arguments=["-d", rviz_config_path],
         condition=IfCondition(LaunchConfiguration("rviz")),
-        parameters=[{"use_sim_time": True}],
+        parameters=[{"use_sim_time": LaunchConfiguration("sim")}],
     )
     return LaunchDescription(
         [
