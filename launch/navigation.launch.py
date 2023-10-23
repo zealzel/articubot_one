@@ -19,7 +19,7 @@ def generate_launch_description():
 
     default_map_path = get_path("fitrobot", ["maps", "office_res002_0523.yaml"])
     default_map_path_sim = get_path(package_name, ["maps", "turtlebot3_world.yaml"])
-    default_parmas_path = get_path(package_name, ["config", "nav2_params.yaml"])
+    default_parmas_path = get_path(package_name, ["config", "nav2_params.yaml.dwb"])
     nav2_launch_path = get_path("nav2_bringup", ["launch", "bringup_launch.py"])
     rviz_config_path = get_path("nav2_bringup", ["rviz", "nav2_default_view.rviz"])
 
