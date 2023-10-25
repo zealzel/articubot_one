@@ -25,6 +25,7 @@ def include_launch_description(launch_path, **kwargs):
 def generate_launch_description():
     package_name = "articubot_one"
     MAP_NAME = "fit_office_res002_1011"  # or turtlebot3_world
+
     params_file_path = get_path(package_name, ["config", "nav2_params.yaml"])
     nav2_launch_path = get_path("nav2_bringup", ["launch", "bringup_launch.py"])
     rviz_config_path = get_path("nav2_bringup", ["rviz", "nav2_default_view.rviz"])
@@ -37,7 +38,7 @@ def generate_launch_description():
     sim_arg = DeclareLaunchArgument(name="sim", default_value="true")
     rviz_arg = DeclareLaunchArgument(name="rviz", default_value="true")
     map_name_arg = DeclareLaunchArgument("map_name", default_value=MAP_NAME)
-    maploc = os.path.join(get_package_share_directory("articubot_one"), 'maps')
+    maploc = os.path.join(get_package_share_directory(package_name), 'maps')
     map_arg = DeclareLaunchArgument(
         name="map",
         default_value=[f'{maploc}/', LaunchConfiguration("map_name"), ".yaml"],
@@ -47,7 +48,6 @@ def generate_launch_description():
         nav2_launch_path,
         launch_arguments={
             "map": LaunchConfiguration("map"),
-            # "use_sim_time": True,
             "use_sim_time": LaunchConfiguration("sim"),
             "params_file": LaunchConfiguration("params_file"),
         },

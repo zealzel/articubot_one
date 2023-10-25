@@ -18,20 +18,19 @@ def get_path(package_name, subpaths):
 
 
 def generate_launch_description():
-    MAP_NAME = "fit_office_res002_1011"  # or turtlebot3_world
     package_name = "articubot_one"
+    MAP_NAME = "fit_office_res002_1011"  # or turtlebot3_world
+
     nav2_launch_path = get_path("nav2_bringup", ["launch", "bringup_launch.py"])
-    costmap_filter_info_launch_path = get_path(
-        package_name, ["launch", "costmap_filter_info.launch.py"]
-    )
+    costmap_filter_info_launch_path = get_path(package_name, ["launch", "costmap_filter_info.launch.py"])
     rviz_config_path = get_path("nav2_bringup", ["rviz", "nav2_default_view.rviz"])
 
-    use_sim_arg = DeclareLaunchArgument(name="sim", default_value="true")
-    use_rviz_arg = DeclareLaunchArgument(name="rviz", default_value="true")
+    sim_arg = DeclareLaunchArgument(name="sim", default_value="true")
+    rviz_arg = DeclareLaunchArgument(name="rviz", default_value="true")
 
     map_name_arg = DeclareLaunchArgument("map_name", default_value=MAP_NAME)
-    maploc = os.path.join(get_package_share_directory(package_name), 'maps')
 
+    maploc = os.path.join(get_package_share_directory(package_name), 'maps')
     map_arg = DeclareLaunchArgument(
         name="map",
         default_value=[f'{maploc}/', LaunchConfiguration("map_name"), ".yaml"],
@@ -45,13 +44,11 @@ def generate_launch_description():
         description="mask file for keepout layer",
     )
 
-    default_params_path = get_path(package_name, ["config", "nav2_params_keepout.yaml"])
-    params_arg = DeclareLaunchArgument(
+    params_file_path = get_path(package_name, ["config", "nav2_params_keepout.yaml"])
+    params_file_arg = DeclareLaunchArgument(
         "params_file",
-        default_value=default_params_path,
-        description=(
-            "Full path to the ROS2 parameters file to use for all launched nodes"
-        ),
+        default_value=params_file_path,
+        description="nav2 params file path",
     )
 
     keepout_params_arg = DeclareLaunchArgument(
@@ -77,14 +74,14 @@ def generate_launch_description():
         }.items(),
     )
 
-    costmap_filter_info_delayed = LaunchDescription(
-        [
-            TimerAction(
-                period=4.0,
-                actions=[costmap_filter_info],
-            )
-        ],
+    # if not delayed, nav2_bringup will not able to launch controllers successfully
+    costmap_filter_info_delayed = LaunchDescription([
+        TimerAction(
+            period=4.0,
+            actions=[costmap_filter_info],
+        )],
     )
+
     rviz = Node(
         package="rviz2",
         executable="rviz2",
@@ -96,12 +93,12 @@ def generate_launch_description():
     )
     return LaunchDescription(
         [
-            use_sim_arg,
-            use_rviz_arg,
+            sim_arg,
+            rviz_arg,
             map_name_arg,
             map_arg,
             mask_arg,
-            params_arg,
+            params_file_arg,
             keepout_params_arg,
             nav2_bringup,
             costmap_filter_info_delayed,

@@ -8,6 +8,7 @@ ros2 launch articubot_one launch_sim.launch.py
 # === teleop ===
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 
+
 # === simulation using rmf's traffic-editor generated world ===
 ros2 launch articubot_one sim.launch.py # (default map_name: fit_office)
 
@@ -21,25 +22,26 @@ ros2 launch slam_toolbox online_async_launch.py \
 # === save the map ===
 ros2 run nav2_map_server map_saver_cli -f mymap # pgm/yaml
     # serialized map for continuous mapping
-    ros2 service call /slam_toolbox/serialize_map slam_toolbox/srv/SerializePoseGraph "filename: '$HOME/maps/mymap'"
+    ros2 service call /slam_toolbox/serialize_map slam_toolbox/srv/SerializePoseGraph "filename: '$HOME/maps/mymap'" # serialized map for continuous mapping
+
 
 # === navigation ===
 ros2 launch articubot_one navigation.launch.py sim:=true rviz:=true
     # verbose
     ros2 launch articubot_one navigation.launch.py sim:=true rviz:=true \
-        map:="$(ros2 pkg prefix articubot_one)/share/articubot_one/maps/turtlebot3_world.yaml"
+        map:="$(ros2 pkg prefix articubot_one)/share/articubot_one/maps/turtlebot3_world.yaml" \
         params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/nav2_params.yaml"
 
 # === navigation using traffic-editor generated gazebo world & slamed maps ===
 ros2 launch articubot_one navigation_rmf.launch.py
     # verbose (default)
     ros2 launch articubot_one navigation_rmf.launch.py rviz:=true \
-        map_name:=fit_office_res002_1011 # options: fit_office_res002_1011(default)|turtlebot3_world
+        map_name:=fit_office_res002_1011 # options: fit_office_res002_1011(default)
         params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/nav2_params.yaml"
 
 
 # === defined-route navigation ===
-ros2 launch articubot_one navigation_keepout.launch.py
+ros2 launch articubot_one navigation_keepout.launch.py sim:=true rviz:=true
     # verbose (default)
     ros2 launch articubot_one navigation.launch.py sim:=true rviz:=true \
         map:="$(ros2 pkg prefix articubot_one)/share/articubot_one/maps/turtlebot3_world.yaml"
@@ -50,6 +52,6 @@ ros2 launch articubot_one navigation_keepout.launch.py
 ros2 launch articubot_one navigation_keepout_rmf.launch.py
     # verbose (default)
     ros2 launch articubot_one  navigation_keepout_rmf.launch.py sim:=true rviz:=true \
-        map_name:=fit_office_res002_0926 # options: fit_office_res002_0926(default)|turtlebot3_world
-        mask:="$(ros2 pkg prefix articubot_one)/share/articubot_one/masks/keepout_mask_turtlebot3_world.yaml"
+        map_name:=fit_office_res002_1011 \ # options: fit_office_res002_1011(default)
+        mask:="$(ros2 pkg prefix articubot_one)/share/articubot_one/masks/keepout_mask.fit_office_res002_1011.yaml"
         params_file:="$(ros2 pkg prefix articubot_one)/share/articubot_one/config/nav2_params_keepout.yaml"
