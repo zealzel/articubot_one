@@ -377,10 +377,11 @@ waypoint_follower:
     loop_rate: 20
     stop_on_failure: false
     waypoint_task_executor_plugin: "wait_at_waypoint"
-    wait_at_waypoint:
-      plugin: "nav2_waypoint_follower::WaitAtWaypoint"
+    input_at_waypoint:
+      plugin: "nav2_waypoint_follower::InputAtWaypoint"
       enabled: True
-      waypoint_pause_duration: 200
+      timeout: 10.0
+      input_topic: ok_to_go
 
 velocity_smoother:
   ros__parameters:
