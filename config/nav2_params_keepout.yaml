@@ -376,7 +376,7 @@ waypoint_follower:
     use_sim_time: True
     loop_rate: 20
     stop_on_failure: false
-    waypoint_task_executor_plugin: "wait_at_waypoint"
+    waypoint_task_executor_plugin: "input_at_waypoint"
     input_at_waypoint:
       plugin: "nav2_waypoint_follower::InputAtWaypoint"
       enabled: True
