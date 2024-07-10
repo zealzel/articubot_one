@@ -60,6 +60,11 @@
 
     <gazebo>
         <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+            <ros>
+                <remapping>/tf:=tf</remapping>
+                <!-- <remapping>/tf_static:=tf_static</remapping> -->
+                <!-- <namespace>/robot1</namespace> -->
+            </ros>
             <parameters>$(find articubot_one)/config/my_controllers_sim.yaml</parameters>
             <!-- <parameters>$(find articubot_one)/config/gaz_ros2_ctl_use_sim.yaml</parameters> -->
         </plugin>
