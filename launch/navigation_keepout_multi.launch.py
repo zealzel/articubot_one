@@ -1,3 +1,5 @@
+import os
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -36,6 +38,16 @@ def generate_launch_description():
     nav2_launch_path = get_path("nav2_bringup", ["launch", "bringup_launch.py"])
     rviz_config_path = get_path("nav2_bringup", ["rviz", "nav2_default_view.rviz"])
 
+    namespace_arg = DeclareLaunchArgument(
+        name="namespace",
+        default_value="",
+        description="Namespace",
+    )
+    use_namespace_arg = DeclareLaunchArgument(
+        name="use_namespace",
+        default_value="false",
+        description="Enable use_sime_time to true",
+    )
     use_sim_arg = DeclareLaunchArgument(
         name="sim",
         default_value="false",
@@ -44,6 +56,12 @@ def generate_launch_description():
     use_rviz_arg = DeclareLaunchArgument(
         name="rviz", default_value="false", description="Run rviz"
     )
+    rviz_config_arg = DeclareLaunchArgument(
+        "rviz_config",
+        default_value=get_path(package_name, ["rviz", "multi_nav2_default_view.rviz"]),
+        description=("Full path to the ROS2 rviz config file"),
+    )
+
     map_arg = DeclareLaunchArgument(
         name="map",
         default_value=default_map_path,
@@ -89,14 +107,48 @@ def generate_launch_description():
             "mask": LaunchConfiguration("mask"),
         }.items(),
     )
+
+    map_server = Node(
+        package="nav2_map_server",
+        executable="map_server",
+        name="map_server",
+        output="screen",
+        parameters=[
+            {
+                "yaml_filename": default_map_path_sim,
+            },
+        ],
+        remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
+    )
+    map_server_lifecyle = Node(
+        package="nav2_lifecycle_manager",
+        executable="lifecycle_manager",
+        name="lifecycle_manager_map_server",
+        output="screen",
+        parameters=[
+            {"use_sim_time": LaunchConfiguration("sim")},
+            {"autostart": True},
+            {"node_names": ["map_server"]},
+        ],
+    )
+
+    nav_launch_dir = os.path.join(
+        get_package_share_directory(package_name), "launch", "nav2_bringup"
+    )
     nav2_bringup = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(nav2_launch_path),
+        PythonLaunchDescriptionSource(
+            os.path.join(nav_launch_dir, "bringup_launch.py")
+        ),
         launch_arguments={
-            "map": LaunchConfiguration("map"),
+            "map": "",
+            "map_server": "False",
+            "namespace": LaunchConfiguration("namespace"),
+            "use_namespace": LaunchConfiguration("use_namespace"),
             "use_sim_time": LaunchConfiguration("sim"),
             "params_file": LaunchConfiguration("params_file"),
         }.items(),
     )
+
     # if not delayed, nav2_bringup will not able to launch controllers successfully
     costmap_filter_info_delayed = LaunchDescription(
         [
@@ -106,24 +158,34 @@ def generate_launch_description():
             )
         ],
     )
-    rviz = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="screen",
-        arguments=["-d", rviz_config_path],
+
+
+    rviz = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(nav_launch_dir, "rviz_launch.py")),
+        launch_arguments={
+            "use_sim_time": LaunchConfiguration("sim"),
+            "namespace": LaunchConfiguration("namespace"),
+            "use_namespace": LaunchConfiguration("use_namespace"),
+            "rviz_config": LaunchConfiguration("rviz_config"),
+            "log_level": "warn",
+        }.items(),
         condition=IfCondition(LaunchConfiguration("rviz")),
-        parameters=[{"use_sim_time": LaunchConfiguration("sim")}],
     )
+
     return LaunchDescription(
         [
+            namespace_arg,
+            use_namespace_arg,
             use_sim_arg,
             use_rviz_arg,
+            rviz_config_arg,
             keepout_params_arg,
             map_arg,
             map_sim_arg,
             mask_arg,
             mask_sim_arg,
+            map_server,
+            map_server_lifecyle,
             params_arg,
             nav2_bringup,
             costmap_filter_info_delayed,
