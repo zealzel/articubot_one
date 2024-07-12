@@ -20,8 +20,8 @@ def generate_launch_description():
     package_name = "articubot_one"
 
     robots = [
-        {"name": "robot1", "x_pos": 0.0, "y_pos": 0.5, "z_pos": 0.01},
-        {"name": "robot2", "x_pos": 0.5, "y_pos": -0.5, "z_pos": 0.01},
+        {'name': 'robot1', 'x_pos': 0.0, 'y_pos': 0.5, 'z_pos': 0.01},
+        {'name': 'robot2', 'x_pos': -0.5, 'y_pos': -0.5, 'z_pos': 0.01},
     ]
 
     arrNodes = []
