@@ -20,8 +20,8 @@ def generate_launch_description():
     package_name = "articubot_one"
 
     robots = [
-        {'name': 'robot1', 'x_pos': 0.0, 'y_pos': 0.5, 'z_pos': 0.01},
-        {'name': 'robot2', 'x_pos': 0.0, 'y_pos': -0.5, 'z_pos': 0.01},
+        {"name": "robot1", "x_pos": 0.0, "y_pos": 0.5, "z_pos": 0.01},
+        {"name": "robot2", "x_pos": 0.5, "y_pos": -0.5, "z_pos": 0.01},
     ]
 
     arrNodes = []
@@ -58,7 +58,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(rsp_launch_path),
             launch_arguments={
                 "namespace":namespace,
-                "use_sim_time": "true", 
+                "use_sim_time": "true",
                 "use_ros2_control": "true",
             }.items(),
         )
@@ -111,7 +111,7 @@ def generate_launch_description():
             )],
         )
         arrNodes.append(spawner)
-        
+
 
     ld = LaunchDescription()
     for node in arrNodes:
