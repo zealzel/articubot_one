@@ -30,13 +30,11 @@ def generate_launch_description():
         package_name, ["masks", "keepout_mask_turtlebot3_world.yaml"]
     )
     default_params_file_path = get_path(
-        package_name, ["config", "nav2_params_keepout.yaml"]
+        package_name, ["config", "nav2_params_keepout_multi.yaml"]
     )
     costmap_filter_info_launch_path = get_path(
         package_name, ["launch", "costmap_filter_info.launch.py"]
     )
-    nav2_launch_path = get_path("nav2_bringup", ["launch", "bringup_launch.py"])
-    rviz_config_path = get_path("nav2_bringup", ["rviz", "nav2_default_view.rviz"])
 
     namespace_arg = DeclareLaunchArgument(
         name="namespace",
@@ -158,7 +156,6 @@ def generate_launch_description():
             )
         ],
     )
-
 
     rviz = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(nav_launch_dir, "rviz_launch.py")),

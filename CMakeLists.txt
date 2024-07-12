@@ -33,7 +33,7 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY config description launch worlds params maps masks
+  DIRECTORY config description launch worlds params maps masks rviz
   DESTINATION share/${PROJECT_NAME}
 )
 
