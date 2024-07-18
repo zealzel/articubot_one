@@ -59,15 +59,29 @@ def generate_launch_description():
             "params_file": LaunchConfiguration("params_file"),
         }.items(),
     )
-    rviz = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="screen",
-        arguments=["-d", rviz_config_path],
-        condition=IfCondition(LaunchConfiguration("rviz")),
-        parameters=[{"use_sim_time": LaunchConfiguration("sim")}],
+
+    rviz_launch_path = get_path(
+        "linorobot2_navigation", ["launch", "nav2_bringup", "rviz_launch.py"]
     )
+    rviz = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(rviz_launch_path),
+        launch_arguments={
+            "use_sim_time": "true",
+            "namespace": "/robot1",
+            "use_namespace": "True",
+            "rviz_config": rviz_config_path,
+            "log_level": "warn",
+        }.items(),
+    )
+    # rviz = Node(
+    #     package="rviz2",
+    #     executable="rviz2",
+    #     name="rviz2",
+    #     output="screen",
+    #     arguments=["-d", rviz_config_path],
+    #     condition=IfCondition(LaunchConfiguration("rviz")),
+    #     parameters=[{"use_sim_time": LaunchConfiguration("sim")}],
+    # )
     return LaunchDescription(
         [
             use_sim_arg,
